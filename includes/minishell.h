@@ -6,7 +6,7 @@
 /*   By: locherif <locherif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 20:06:15 by locherif          #+#    #+#             */
-/*   Updated: 2024/12/04 18:54:41 by locherif         ###   ########.fr       */
+/*   Updated: 2024/12/08 19:26:57 by locherif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ typedef struct s_redir
 {
 	char				*file;
 	t_redir_type		type;
-	// struct s_redir		*next;
 }						t_redir;
 
 typedef struct s_command

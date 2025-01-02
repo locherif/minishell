@@ -6,7 +6,7 @@
 /*   By: locherif <locherif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 22:43:21 by locherif          #+#    #+#             */
-/*   Updated: 2024/12/06 20:25:33 by locherif         ###   ########.fr       */
+/*   Updated: 2024/12/14 14:57:09 by locherif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,10 @@ int	ranger(t_token *token, t_minishell *minishell)
 		while(token && token->type != PIPE)
 		{
 			if (token->type == WORD)
-				add_word(args, ft_expand(token->content));
+				add_word(args, token->content);
 			else
 			{
-				add_redir(redirs, token->content, ft_expand(token->next->content), &i);
+				add_redir(redirs, token->content, token->next->content, &i);
 				token = token->next;
 			}
 			token = token->next;

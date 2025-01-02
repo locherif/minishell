@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ranger.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: locherif <locherif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 22:43:21 by locherif          #+#    #+#             */
-/*   Updated: 2024/12/14 14:57:09 by locherif         ###   ########.fr       */
+/*   Updated: 2025/01/02 15:55:45 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,3 +112,5 @@ int	ranger(t_token *token, t_minishell *minishell)
 	}
 	return (1);
 }
+
+/* test*/

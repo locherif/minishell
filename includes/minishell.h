@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 20:06:15 by locherif          #+#    #+#             */
-/*   Updated: 2025/01/06 14:02:25 by braugust         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:19:34 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,5 +118,9 @@ void					add_command_back(t_command **command_list,
 void					clear_command(t_command *command);
 void					add_word(char **args, char *current_arg);
 int						eclaireur(t_token *token, t_token_type type);
+void					append_char(char **result, char c);
+void					handle_expansion(t_expand_state *state, const char *input, int *i, char **env);
+int						handle_quotes(char c, t_expand_state *state);
+void					expand_var(t_token *token, int exit_status, char **env);
 
 #endif

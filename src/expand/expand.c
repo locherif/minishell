@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 10:52:33 by braugust          #+#    #+#             */
-/*   Updated: 2025/01/06 14:10:57 by braugust         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:22:02 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	expand_var(t_token *token, int exit_status, char **env)
 		while (input[i])
 		{
 			if (input[i] == '\'' || input[i] == '\"')
-				handle_quotes(&state, input[i]);
+				handle_quotes(input[i], &state);
 			else if (input[i] == '$' && state.in_quote != 2)
 				handle_expansion(&state, input, &i, env);
 			else

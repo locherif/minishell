@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: locherif <locherif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 20:06:15 by locherif          #+#    #+#             */
-/*   Updated: 2024/12/08 19:26:57 by locherif         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:02:25 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,19 @@ typedef struct s_minishell
 	t_token				*token;
 	t_command			*command;
 }						t_minishell;
+
+typedef struct	s_shell
+{
+	char				**envp;
+	int					exit_status;
+}						t_shell;
+
+typedef struct	s_expand_state
+{
+	char	*result;
+	int		in_quote;
+	int		exit_status;
+} 						t_expand_state;
 
 void					printtoken(t_token *tok);
 int						get_tokens(t_minishell *mini, char *prompt);

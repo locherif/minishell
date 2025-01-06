@@ -8,7 +8,7 @@ OBJ_PATH = objs/
 SRC		= minishell.c \
 		  parsing/automat.c parsing/lexer_utils.c parsing/strings.c \
 		  parsing/token_utils.c parsing/tokenizer.c parsing/ranger.c \
-		  lib/ft_calloc.c parsing/command_utils.c
+		  lib/ft_calloc.c parsing/command_utils.c expand/expand.c
 		  
 
 

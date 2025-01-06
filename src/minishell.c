@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: locherif <locherif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 20:04:36 by locherif          #+#    #+#             */
-/*   Updated: 2024/12/04 18:56:15 by locherif         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:14:50 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,11 +134,13 @@ bool	parsing(char *str, t_minishell *minishell)
 	return (1);
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **env)
 {
 	t_minishell	minishell;
 	char		*str;
 
+	(void)argc;
+	(void)argv;
 	minishell = (t_minishell){0};
 	while (1)
 	{
@@ -149,7 +151,11 @@ int	main(void)
 			continue ;
 		add_history(str);
 		if (!parsing(str, &minishell))
-			continue ;
+		{
+			free(str);
+			continue;
+		}
+		expand_var(minishell.token, 0, env);
 		free(str);
 		clear_token(minishell.token);
 		clear_command(minishell.command);

@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 10:52:33 by braugust          #+#    #+#             */
-/*   Updated: 2025/01/07 12:01:02 by braugust         ###   ########.fr       */
+/*   Updated: 2025/01/07 15:58:24 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,11 @@ int	handle_quotes(char c, t_expand_state *state)
 void	handle_expansion(t_expand_state *state, const char *input, int *i, char **env)
 {
 	int		start;
+	int		j;
 	char	*var_name;
 	char	*var_value;
 
+	j = 0;
 	(*i)++;
 	start = *i;
 	if (input[start] == '?')
@@ -105,13 +107,14 @@ void	handle_expansion(t_expand_state *state, const char *input, int *i, char **e
 		(*i)++;
 	var_name = strndup(input + start, *i - start);
 	var_value = NULL;
-	for (int j = 0; env[j]; j++)
+	while (env[j])
 	{
 		if (!strncmp(env[j], var_name, strlen(var_name)) && env[j][strlen(var_name)] == '=')
 		{
 			var_value = env[j] + strlen(var_name) + 1;
 			break ;
 		}
+		j++;
 	}
 	free(var_name);
 	if (var_value)

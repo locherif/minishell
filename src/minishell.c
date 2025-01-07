@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 20:04:36 by locherif          #+#    #+#             */
-/*   Updated: 2025/01/06 14:14:50 by braugust         ###   ########.fr       */
+/*   Updated: 2025/01/07 12:01:33 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ int	main(int argc, char **argv, char **env)
 			free(str);
 			continue;
 		}
-		expand_var(minishell.token, 0, env);
+        expand_command(minishell.command, minishell.exit_status, minishell.env);
 		free(str);
 		clear_token(minishell.token);
 		clear_command(minishell.command);

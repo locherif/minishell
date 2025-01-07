@@ -6,40 +6,61 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 10:52:33 by braugust          #+#    #+#             */
-/*   Updated: 2025/01/06 14:22:02 by braugust         ###   ########.fr       */
+/*   Updated: 2025/01/07 12:01:02 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	expand_var(t_token *token, int exit_status, char **env)
-{
-	t_expand_state	state;
-	const char		*input;
-	int				i;
 
-	while (token)
-	{
-		state.result = strdup("");
-		state.in_quote = 0;
-		state.exit_status = exit_status;
-		input = token->content;
-		i = 0;
-		while (input[i])
-		{
-			if (input[i] == '\'' || input[i] == '\"')
-				handle_quotes(input[i], &state);
-			else if (input[i] == '$' && state.in_quote != 2)
-				handle_expansion(&state, input, &i, env);
-			else
-				append_char(&state.result, input[i]);
-			i++;
-		}
-		free(token->content);
-		token->content = state.result;
-		token = token->next;
-	}
+void expand_command(t_command *command, int exit_status, char **env)
+{
+    int i;
+
+    while (command)
+    {
+        i = 0;
+        while (command->args && command->args[i])
+        {
+            char *expanded = strdup("");
+            t_expand_state state = {expanded, 0, exit_status};
+            expand_var(command->args[i], &state, env);
+            free(command->args[i]);
+            command->args[i] = state.result;
+            i++;
+        }
+		
+        i = 0;
+        while (i < command->redir_size)
+        {
+            char *expanded = strdup("");
+            t_expand_state state = {expanded, 0, exit_status};
+            expand_var(command->redirs[i].file, &state, env);
+            free(command->redirs[i].file);
+            command->redirs[i].file = state.result;
+            i++;
+        }
+
+        command = command->next;
+    }
 }
+
+void expand_var(const char *input, t_expand_state *state, char **env)
+{
+    int i = 0;
+
+    while (input[i])
+    {
+        if (input[i] == '\'' || input[i] == '\"')
+            handle_quotes(input[i], state);
+        else if (input[i] == '$' && state->in_quote != 2)
+            handle_expansion(state, input, &i, env);
+        else
+            append_char(&state->result, input[i]);
+        i++;
+    }
+}
+
 
 int	handle_quotes(char c, t_expand_state *state)
 {

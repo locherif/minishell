@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 20:06:15 by locherif          #+#    #+#             */
-/*   Updated: 2025/01/06 14:19:34 by braugust         ###   ########.fr       */
+/*   Updated: 2025/01/09 19:17:23 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ int						eclaireur(t_token *token, t_token_type type);
 void					append_char(char **result, char c);
 void					handle_expansion(t_expand_state *state, const char *input, int *i, char **env);
 int						handle_quotes(char c, t_expand_state *state);
-void					expand_var(t_token *token, int exit_status, char **env);
+void 					expand_command(t_command *command, int exit_status, char **env);
+void					expand_var(const char *input, t_expand_state *state, char **env);
 
 #endif

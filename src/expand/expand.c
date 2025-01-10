@@ -6,58 +6,68 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 10:52:33 by braugust          #+#    #+#             */
-/*   Updated: 2025/01/09 19:17:05 by braugust         ###   ########.fr       */
+/*   Updated: 2025/01/10 12:54:48 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-void expand_command(t_command *command, int exit_status, char **env)
+void expand_var_command(t_command *command, int exit_status, char **env)
 {
-    int i;
+    t_expand_state state;
+    int i, j;
+    const char *input;
 
     while (command)
     {
+        // Expansion des arguments (args)
         i = 0;
         while (command->args && command->args[i])
         {
-            char *expanded = strdup("");
-            t_expand_state state = {expanded, 0, exit_status};
-            expand_var(command->args[i], &state, env);
-            free(command->args[i]);
+            state.result = strdup("");
+            state.in_quote = 0;
+            state.exit_status = exit_status;
+            input = command->args[i];
+
+            j = 0;
+            while (input[j])
+            {
+                if (input[j] == '\'' || input[j] == '\"')
+                    handle_quotes(input[j], &state);
+                else if (input[j] == '$' && state.in_quote != 2)
+                    handle_expansion(&state, input, &j, env);
+                else
+                    append_char(&state.result, input[j]);
+                j++;
+            }
             command->args[i] = state.result;
             i++;
         }
-		
+        // Expansion des fichiers de redirection (redirs)
         i = 0;
         while (i < command->redir_size)
         {
-            char *expanded = strdup("");
-            t_expand_state state = {expanded, 0, exit_status};
-            expand_var(command->redirs[i].file, &state, env);
-            free(command->redirs[i].file);
+            state.result = strdup("");
+            state.in_quote = 0;
+            state.exit_status = exit_status;
+            input = command->redirs[i].file;
+
+            j = 0;
+            while (input[j])
+            {
+                if (input[j] == '\'' || input[j] == '\"')
+                    handle_quotes(input[j], &state);
+                else if (input[j] == '$' && state.in_quote != 2)
+                    handle_expansion(&state, input, &j, env);
+                else
+                    append_char(&state.result, input[j]);
+                j++;
+            }
             command->redirs[i].file = state.result;
             i++;
         }
 
         command = command->next;
-    }
-}
-
-void expand_var(const char *input, t_expand_state *state, char **env)
-{
-    int i = 0;
-
-    while (input[i])
-    {
-        if (input[i] == '\'' || input[i] == '\"')
-            handle_quotes(input[i], state);
-        else if (input[i] == '$' && state->in_quote != 2)
-            handle_expansion(state, input, &i, env);
-        else
-            append_char(&state->result, input[i]);
-        i++;
     }
 }
 
@@ -90,9 +100,9 @@ void	handle_expansion(t_expand_state *state, const char *input, int *i, char **e
 	char	*var_name;
 	char	*var_value;
 
-	j = 0;
 	(*i)++;
 	start = *i;
+	j = 0;
 	if (input[start] == '?')
 	{
 		var_value = malloc(12);
@@ -136,4 +146,15 @@ void	append_char(char **result, char c)
 	new_result[len + 1] = '\0';
 	free(*result);
 	*result = new_result;
+}
+
+char *get_env_value(t_env *env_list, const char *key)
+{
+    while (env_list)
+    {
+        if (!strcmp(env_list->key, key))
+            return (env_list->content);
+        env_list = env_list->next;
+    }
+    return (NULL);
 }

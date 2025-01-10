@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 20:06:15 by locherif          #+#    #+#             */
-/*   Updated: 2025/01/09 19:17:23 by braugust         ###   ########.fr       */
+/*   Updated: 2025/01/10 12:55:03 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,12 @@ typedef struct s_command
 	struct s_command	*next;
 }						t_command;
 
-typedef struct s_minishell
+typedef struct s_env
 {
-	t_token				*token;
-	t_command			*command;
-}						t_minishell;
+	char				*key;
+	char				*content;
+	struct s_env		*next;
+}						t_env;
 
 typedef struct	s_shell
 {
@@ -76,12 +77,21 @@ typedef struct	s_shell
 	int					exit_status;
 }						t_shell;
 
+typedef struct s_minishell
+{
+	t_token				*token;
+	t_command			*command;
+	t_shell				shell;
+	t_env				*env_list;
+}						t_minishell;
+
 typedef struct	s_expand_state
 {
-	char	*result;
-	int		in_quote;
-	int		exit_status;
+	char				*result;
+	int					in_quote;
+	int					exit_status;
 } 						t_expand_state;
+
 
 void					printtoken(t_token *tok);
 int						get_tokens(t_minishell *mini, char *prompt);
@@ -121,7 +131,13 @@ int						eclaireur(t_token *token, t_token_type type);
 void					append_char(char **result, char c);
 void					handle_expansion(t_expand_state *state, const char *input, int *i, char **env);
 int						handle_quotes(char c, t_expand_state *state);
-void 					expand_command(t_command *command, int exit_status, char **env);
-void					expand_var(const char *input, t_expand_state *state, char **env);
+void 					expand_var_command(t_command *command, int exit_status, char **env);
+t_env					*init_env_list(char **envp);
+t_env					*new_env_node(char *key, char *content);
+void					print_env_list(t_env *env);
+void					free_env_list(t_env *env);
+t_env					*find_env(t_env *env, const char *key);
+int						update_env(t_env *env, const char *key, const char *new_content);
+char					*get_env_value(t_env *env_list, const char *key);
 
 #endif

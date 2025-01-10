@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 20:04:36 by locherif          #+#    #+#             */
-/*   Updated: 2025/01/09 19:37:34 by braugust         ###   ########.fr       */
+/*   Updated: 2025/01/10 12:56:33 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,17 +135,17 @@ bool	parsing(char *str, t_minishell *minishell)
 }
 
 int	main(int argc, char **argv, char **envp)
-{
+{	
 	t_minishell	minishell;
 	char		*str;
-	t_shell shell;
 
 	(void)argc;
 	(void)argv;
-	shell.envp = envp;
-	shell.exit_status = 0;
-	minishell.token = NULL;
-	minishell.command = NULL;
+	minishell = (t_minishell){0};
+	minishell.env_list = init_env_list(envp);
+	//print_env_list(minishell.env_list);
+	if (!minishell.env_list)
+		return (1);
 	while (1)
 	{
 		str = readline(">😜 ");
@@ -159,7 +159,7 @@ int	main(int argc, char **argv, char **envp)
 			free(str);
 			continue;
 		}
-        expand_command(minishell.command, shell.exit_status, shell.envp);
+		expand_var_command(minishell.command, minishell.shell.exit_status, envp);
 		free(str);
 		clear_token(minishell.token);
 		clear_command(minishell.command);

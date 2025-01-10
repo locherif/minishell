@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 10:52:33 by braugust          #+#    #+#             */
-/*   Updated: 2025/01/10 12:54:48 by braugust         ###   ########.fr       */
+/*   Updated: 2025/01/10 13:01:07 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,13 @@
 void expand_var_command(t_command *command, int exit_status, char **env)
 {
     t_expand_state state;
-    int i, j;
-    const char *input;
+    int				i;
+	int				j;
+    const char		*input;
 
     while (command)
     {
-        // Expansion des arguments (args)
+        // Expansion des arguments
         i = 0;
         while (command->args && command->args[i])
         {
@@ -43,7 +44,7 @@ void expand_var_command(t_command *command, int exit_status, char **env)
             command->args[i] = state.result;
             i++;
         }
-        // Expansion des fichiers de redirection (redirs)
+        // Expansion des fichiers de redirection
         i = 0;
         while (i < command->redir_size)
         {

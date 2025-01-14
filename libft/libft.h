@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 15:54:52 by braugust          #+#    #+#             */
-/*   Updated: 2024/11/18 11:07:25 by braugust         ###   ########.fr       */
+/*   Updated: 2025/01/14 08:07:30 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int		ft_isprint(int c);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
 int		ft_atoi(const char *nprt);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char	*ft_itoa(int n);
@@ -74,5 +73,8 @@ int		ft_convert_ptr(void *pt);
 int		ft_putnbr(int nb);
 int		ft_putusig(unsigned int nb);
 int		ft_printhexa(unsigned int nb, const char base);
+char	*ft_strncat(char *dest, char *src, unsigned int nb);
+char    *ft_strcpy(char *dest, char *src);
+char	*ft_strcat(char *dest, char *src);
 
 #endif

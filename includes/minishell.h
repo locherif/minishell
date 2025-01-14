@@ -6,12 +6,13 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 20:06:15 by locherif          #+#    #+#             */
-/*   Updated: 2025/01/10 12:55:03 by braugust         ###   ########.fr       */
+/*   Updated: 2025/01/14 08:30:29 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+# include "../libft/libft.h"
 # include <curses.h>
 # include <dirent.h>
 # include <errno.h>
@@ -106,8 +107,7 @@ void					add_token_back(t_token **token_list,
 t_token					*last_token(t_token *token);
 void					clear_token(t_token *token);
 t_token					*new_token(char *str, t_token_type type);
-char					*ft_substr(char *s, unsigned int start, int len);
-int						ft_strlen(char *str);
+//char					*ft_substr(char *s, unsigned int start, int len);
 int						ft_strncmp(char *s1, char *s2, int n);
 int						get_len_word(char *prompt, int i);
 int						is_not_word(char c);
@@ -129,9 +129,9 @@ void					clear_command(t_command *command);
 void					add_word(char **args, char *current_arg);
 int						eclaireur(t_token *token, t_token_type type);
 void					append_char(char **result, char c);
-void					handle_expansion(t_expand_state *state, const char *input, int *i, char **env);
+void					handle_expansion(t_expand_state *state, const char *input, int *i, t_env *env_list);
 int						handle_quotes(char c, t_expand_state *state);
-void 					expand_var_command(t_command *command, int exit_status, char **env);
+void					expand_var_command(t_command *command, int exit_status, t_env *env_list);
 t_env					*init_env_list(char **envp);
 t_env					*new_env_node(char *key, char *content);
 void					print_env_list(t_env *env);
@@ -139,5 +139,6 @@ void					free_env_list(t_env *env);
 t_env					*find_env(t_env *env, const char *key);
 int						update_env(t_env *env, const char *key, const char *new_content);
 char					*get_env_value(t_env *env_list, const char *key);
+void					expand_test(t_minishell *minishell);
 
 #endif

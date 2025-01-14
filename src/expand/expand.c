@@ -6,13 +6,13 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 10:52:33 by braugust          #+#    #+#             */
-/*   Updated: 2025/01/10 13:01:07 by braugust         ###   ########.fr       */
+/*   Updated: 2025/01/14 08:15:09 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void expand_var_command(t_command *command, int exit_status, char **env)
+void expand_var_command(t_command *command, int exit_status, t_env *env_list)
 {
     t_expand_state state;
     int				i;
@@ -28,15 +28,15 @@ void expand_var_command(t_command *command, int exit_status, char **env)
             state.result = strdup("");
             state.in_quote = 0;
             state.exit_status = exit_status;
+			
             input = command->args[i];
-
             j = 0;
             while (input[j])
             {
                 if (input[j] == '\'' || input[j] == '\"')
                     handle_quotes(input[j], &state);
                 else if (input[j] == '$' && state.in_quote != 2)
-                    handle_expansion(&state, input, &j, env);
+                    handle_expansion(&state, input, &j, env_list);
                 else
                     append_char(&state.result, input[j]);
                 j++;
@@ -51,15 +51,15 @@ void expand_var_command(t_command *command, int exit_status, char **env)
             state.result = strdup("");
             state.in_quote = 0;
             state.exit_status = exit_status;
-            input = command->redirs[i].file;
 
+            input = command->redirs[i].file;
             j = 0;
             while (input[j])
             {
                 if (input[j] == '\'' || input[j] == '\"')
                     handle_quotes(input[j], &state);
                 else if (input[j] == '$' && state.in_quote != 2)
-                    handle_expansion(&state, input, &j, env);
+                    handle_expansion(&state, input, &j, env_list);
                 else
                     append_char(&state.result, input[j]);
                 j++;
@@ -94,42 +94,49 @@ int	handle_quotes(char c, t_expand_state *state)
 	return (0);
 }
 
-void	handle_expansion(t_expand_state *state, const char *input, int *i, char **env)
+void	handle_expansion(t_expand_state *state, const char *input, int *i, t_env *env_list)
 {
 	int		start;
-	int		j;
 	char	*var_name;
 	char	*var_value;
 
 	(*i)++;
 	start = *i;
-	j = 0;
 	if (input[start] == '?')
 	{
-		var_value = malloc(12);
-		if (!var_value)
+	char	*str_value = ft_itoa(state->exit_status);
+
+		if (!str_value)
 			return ;
-		snprintf(var_value, 12, "%d", state->exit_status);
-		state->result = strncat(state->result, var_value, strlen(var_value));
-		free(var_value);
+		size_t old_len = ft_strlen(state->result);
+		state->result = realloc(state->result, old_len + ft_strlen(str_value) + 1);
+		if (!state->result)
+			return ;
+		ft_strcat(state->result, str_value);
+		free(str_value);
 		return ;
 	}
-	while (input[*i] && (isalnum(input[*i]) || input[*i] == '_'))
+	
+	while (input[*i] && (isalnum((unsigned char)input[*i]) || input[*i] == '_'))
 		(*i)++;
+
 	var_name = strndup(input + start, *i - start);
-	var_value = NULL;
-	while (env[j])
-	{
-		if (!strncmp(env[j], var_name, strlen(var_name)) && env[j][strlen(var_name)] == '=')
-		{
-			var_value = env[j] + strlen(var_name) + 1;
-			break ;
-		}
-		j++;
-	}
+	if (!var_name)
+		return ;
+
+	var_value = get_env_value(env_list, var_name);
 	free(var_name);
+
 	if (var_value)
-		state->result = strncat(state->result, var_value, strlen(var_value));
+	{
+		size_t old_len = ft_strlen(state->result);
+		state->result = realloc(state->result, old_len + ft_strlen(var_value) + 1);
+		if (!state->result)
+			return ;
+		ft_strcat(state->result, var_value);
+	}
+	// Sinon, on n'ajoute rien, => variable non définie => ""
+
 	(*i)--;
 }
 
@@ -138,11 +145,11 @@ void	append_char(char **result, char c)
 	int		len;
 	char	*new_result;
 
-	len = strlen(*result);
+	len = ft_strlen(*result);
 	new_result = malloc(len + 2);
 	if (!new_result)
 		return ;
-	strcpy(new_result, *result);
+	ft_strcpy(new_result, *result);
 	new_result[len] = c;
 	new_result[len + 1] = '\0';
 	free(*result);

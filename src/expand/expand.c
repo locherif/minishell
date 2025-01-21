@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 10:52:33 by braugust          #+#    #+#             */
-/*   Updated: 2025/01/14 08:15:09 by braugust         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:34:07 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,8 +135,7 @@ void	handle_expansion(t_expand_state *state, const char *input, int *i, t_env *e
 			return ;
 		ft_strcat(state->result, var_value);
 	}
-	// Sinon, on n'ajoute rien, => variable non définie => ""
-
+	
 	(*i)--;
 }
 

@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 10:52:33 by braugust          #+#    #+#             */
-/*   Updated: 2025/01/21 12:34:07 by braugust         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:36:03 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void	handle_expansion(t_expand_state *state, const char *input, int *i, t_env *e
 	int		start;
 	char	*var_name;
 	char	*var_value;
+	size_t	old_len;
 
 	(*i)++;
 	start = *i;
@@ -108,7 +109,7 @@ void	handle_expansion(t_expand_state *state, const char *input, int *i, t_env *e
 
 		if (!str_value)
 			return ;
-		size_t old_len = ft_strlen(state->result);
+		old_len = ft_strlen(state->result);
 		state->result = realloc(state->result, old_len + ft_strlen(str_value) + 1);
 		if (!state->result)
 			return ;
@@ -129,7 +130,7 @@ void	handle_expansion(t_expand_state *state, const char *input, int *i, t_env *e
 
 	if (var_value)
 	{
-		size_t old_len = ft_strlen(state->result);
+		old_len = ft_strlen(state->result);
 		state->result = realloc(state->result, old_len + ft_strlen(var_value) + 1);
 		if (!state->result)
 			return ;

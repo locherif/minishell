@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 11:25:58 by braugust          #+#    #+#             */
-/*   Updated: 2025/01/10 12:50:30 by braugust         ###   ########.fr       */
+/*   Updated: 2025/01/21 13:11:04 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ t_env   *init_env_list(char **envp)
         separator = 0;
         while (envp[i][separator] && envp[i][separator] != '=')
             separator++;
-        key = strdup(envp[i]);
+        key = ft_strdup(envp[i]);
         if (!key)
             return (NULL);
         key[separator] = '\0';
-        content = strdup(envp[i] + separator + 1);
+        content = ft_strdup(envp[i] + separator + 1);
         if (!content)
         {
             free(key);
@@ -107,7 +107,7 @@ int update_env(t_env *env, const char *key, const char *new_content)
     if (!node)
         return (0);
     free(node->content);
-    node->content = strdup(new_content);
+    node->content = ft_strdup(new_content);
     if (!node->content)
         return (0);
     return (1);

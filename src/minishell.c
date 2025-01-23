@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 20:04:36 by locherif          #+#    #+#             */
-/*   Updated: 2025/01/14 08:32:38 by braugust         ###   ########.fr       */
+/*   Updated: 2025/01/21 13:25:51 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,28 +117,6 @@ void	print_commands(t_command *command)
 		printf("\n\n");
 	}
 }
-
-void	expand_test(t_minishell *minishell)
-{
-	t_command	*cmd_check;
-	int			i;
-	
-	printf("----- DEBUG AFTER EXPAND -----\n");
-	cmd_check = minishell->command;
-	while (cmd_check)
-	{
-    	printf("Commande:\n");
-    	i = 0;
-   		while (cmd_check->args && cmd_check->args[i])
-    	{
-       		printf("Arg[%d] = '%s'\n", i, cmd_check->args[i]);
-        	i++;
-    	}
-    cmd_check = cmd_check->next;
-	}
-	printf("--------------------------------\n");
-}
-
 bool	parsing(char *str, t_minishell *minishell)
 {
 	minishell->token = NULL;
@@ -189,4 +167,3 @@ int	main(int argc, char **argv, char **envp)
 	}
 	return (0);
 }
-

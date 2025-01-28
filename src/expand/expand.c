@@ -6,7 +6,7 @@
 /*   By: braugust <braugust@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 10:52:33 by braugust          #+#    #+#             */
-/*   Updated: 2025/01/21 12:36:03 by braugust         ###   ########.fr       */
+/*   Updated: 2025/01/28 09:50:41 by braugust         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,10 @@ void expand_var_command(t_command *command, int exit_status, t_env *env_list)
             while (input[j])
             {
                 if (input[j] == '\'' || input[j] == '\"')
+				{
                     handle_quotes(input[j], &state);
+					append_char(&state.result, input[j]);
+				}
                 else if (input[j] == '$' && state.in_quote != 2)
                     handle_expansion(&state, input, &j, env_list);
                 else
@@ -165,4 +168,27 @@ char *get_env_value(t_env *env_list, const char *key)
         env_list = env_list->next;
     }
     return (NULL);
+}
+
+
+void expand_test(t_minishell *minishell)
+{
+    t_command *cmd_check;
+    int i;
+
+    printf("----- DEBUG AFTER EXPAND -----\n");
+    cmd_check = minishell->command;
+
+    while (cmd_check)
+    {
+        printf("Commande:\n");
+        i = 0;
+        while (cmd_check->args && cmd_check->args[i])
+        {
+            printf("Arg[%d] = '%s'\n", i, cmd_check->args[i]);
+            i++;
+        }
+        cmd_check = cmd_check->next;
+    }
+    printf("--------------------------------\n");
 }
